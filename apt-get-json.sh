@@ -35,10 +35,10 @@ apt-get upgrade -s -q |
 		# append package name into holdspace
 		G
 		# make json string from package name and package status
-		s/^\s\s\(.*\)\n#\(.*\)/{"name":"\1","status":"\2"}/' | 
+		s/^\s\s\(.*\)\n#\(.*\)/{\\"name\\":\\"\1\\",\\"status\\":\\"\2\\"}/' | 
 		# replace all new line by ,
-		tr  '\n' ',' | 
-		sed '
-			# make json array from line and wrap it into a json object
-			s/\(.*\),/{"packages": [\1]}/'
-echo
+	tr  '\n' ',' | 
+	sed '
+		# make json array from line and wrap it into a json object
+		s/\(.*\),/\1/' |
+	xargs printf '{"packages": [%b]}'
